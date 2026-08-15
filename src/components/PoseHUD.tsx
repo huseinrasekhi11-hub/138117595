@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertCircle, CheckCircle2, RefreshCw, Eye, Activity } from 'lucide-react';
+import { Camera, AlertCircle, CheckCircle2, RefreshCw, Eye, Activity } from 'lucide-react';
 
 interface PoseHUDProps {
   exerciseName?: string;
@@ -8,27 +8,44 @@ interface PoseHUDProps {
   orientation?: 'side' | 'front';
 }
 
-export const PoseHUD: React.FC<PoseHUDProps> = ({ exerciseName = 'خم کردن زانو (Knee Flexion)', targetJoint = 'زانو راست', targetAngle = 120, orientation = 'side' }) => {
+export const PoseHUD: React.FC<PoseHUDProps> = ({
+  exerciseName = "خم کردن زانو پس از جراحی (Knee Flexion)",
+  targetJoint = "زانو راست",
+  targetAngle = 120,
+  orientation = "side"
+}) => {
   const [currentAngle, setCurrentAngle] = useState(115);
   const [currentView, setCurrentView] = useState<'side' | 'front'>(orientation);
+  const [isCalibrated, setIsCalibrated] = useState(true);
   const accuracy = Math.min(100, Math.round((currentAngle / targetAngle) * 100));
 
   return (
     <div className="w-full bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl text-slate-100 flex flex-col">
       <div className="bg-slate-800/90 backdrop-blur-md px-6 py-3 border-b border-slate-700/60 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-xl ${currentView === 'side' ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400'}`}><Eye className="w-5 h-5"/></div>
+          <div className={`p-2 rounded-xl ${currentView === 'side' ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400'}`}>
+            <Eye className="w-5 h-5"/>
+          </div>
           <div>
             <div className="text-xs text-slate-400 font-medium">راهنمای استقرار در کادر دوربین:</div>
-            <div className="text-sm font-bold text-white">{currentView === 'side' ? '«لطفاً به صورت نیم‌رخ (Side-View) در فاصله ۲ متری از دوربین بایستید»' : '«لطفاً به صورت تمام‌رخ (Front-View) روبه‌روی دوربین قرار بگیرید»'}</div>
+            <div className="text-sm font-bold text-white">
+              {currentView === 'side' 
+                ? '«لطفاً به صورت نیم‌رخ (Side-View) در فاصله ۲ متری از دوربین بایستید»'
+                : '«لطفاً به صورت تمام‌رخ (Front-View) روبه‌روی دوربین قرار بگیرید»'}
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => setCurrentView(currentView === 'side' ? 'front' : 'side')} className="text-xs px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 transition text-slate-300 flex items-center gap-1.5">
-            <RefreshCw className="w-3.5 h-3.5"/> تغییر نما ({currentView === 'side' ? 'نیم‌رخ' : 'تمام‌رخ'})
+          <button 
+            onClick={() => setCurrentView(currentView === 'side' ? 'front' : 'side')}
+            className="text-xs px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 transition text-slate-300 flex items-center gap-1.5"
+          >
+            <RefreshCw className="w-3.5 h-3.5"/>
+            تغییر نما ({currentView === 'side' ? 'نیم‌رخ' : 'تمام‌رخ'})
           </button>
           <span className="flex items-center gap-1.5 text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1.5 rounded-lg font-medium">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> پایش زنده فعال
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            پایش زنده فعال
           </span>
         </div>
       </div>
@@ -61,13 +78,26 @@ export const PoseHUD: React.FC<PoseHUDProps> = ({ exerciseName = 'خم کردن 
           <circle cx="315" cy="430" r="4" fill="#64748b" opacity="0.5" />
         </svg>
         <div className="absolute top-6 left-6 bg-slate-900/90 border border-emerald-500/40 rounded-2xl p-4 shadow-xl backdrop-blur-md">
-          <div className="text-xs text-slate-400 flex items-center gap-1 mb-1"><Activity className="w-3.5 h-3.5 text-emerald-400"/> زاویه مفصل هدف:</div>
-          <div className="flex items-baseline gap-2"><span className="text-3xl font-black text-emerald-400">{currentAngle}°</span><span className="text-xs text-slate-400">/ هدف: {targetAngle}°</span></div>
-          <div className="w-36 bg-slate-800 h-2 rounded-full mt-2 overflow-hidden"><div className="bg-emerald-500 h-full rounded-full transition-all duration-300" style={{ width: `${accuracy}%` }}></div></div>
+          <div className="text-xs text-slate-400 flex items-center gap-1 mb-1">
+            <Activity className="w-3.5 h-3.5 text-emerald-400"/>
+            زاویه مفصل هدف ({targetJoint}):
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl font-black text-emerald-400">{currentAngle}°</span>
+            <span className="text-xs text-slate-400">/ هدف: {targetAngle}°</span>
+          </div>
+          <div className="w-36 bg-slate-800 h-2 rounded-full mt-2 overflow-hidden">
+            <div className="bg-emerald-500 h-full rounded-full transition-all duration-300" style={{ width: `${accuracy}%` }}></div>
+          </div>
         </div>
         <div className="absolute bottom-6 right-6 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3.5 backdrop-blur-md flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400"><CheckCircle2 className="w-5 h-5"/></div>
-          <div><div className="text-xs text-slate-400">وضعیت بیومکانیک:</div><div className="text-sm font-bold text-slate-200">راستای استخوان ران و ساق استاندارد است</div></div>
+          <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400">
+            <CheckCircle2 className="w-5 h-5"/>
+          </div>
+          <div>
+            <div className="text-xs text-slate-400">وضعیت اجرای بیومکانیک:</div>
+            <div className="text-sm font-bold text-slate-200">راستای استخوان ران و ساق استاندارد است</div>
+          </div>
         </div>
       </div>
     </div>

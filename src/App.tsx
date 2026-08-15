@@ -30,6 +30,9 @@ export default function App() {
 
   return (
     <div className={`min-h-screen font-sans antialiased transition-colors duration-300 ${darkMode ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'}`} dir="rtl">
+      
+      {showAuth && <AuthUI onClose={() => setShowAuth(false)} />}
+
       <header className={`sticky top-0 z-50 backdrop-blur-md border-b ${darkMode ? 'bg-slate-900/80 border-slate-800' : 'bg-white/80 border-slate-200'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setCurrentPage('home')}>
@@ -50,8 +53,6 @@ export default function App() {
           </div>
         </div>
       </header>
-
-      {showAuth && <AuthUI onClose={() => setShowAuth(false)} />}
 
       {currentPage === 'patient-dashboard' ? (
         <PatientDashboard/>
