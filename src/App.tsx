@@ -2,11 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { PoseHUD } from './components/PoseHUD';
 import { PatientDashboard } from './pages/PatientDashboard';
 import { FAQ } from './components/FAQ';
+import { AuthUI } from './components/AuthUI';
+import { TherapistProfile } from './pages/TherapistProfile';
+import { About } from './pages/About';
+import { Footer } from './components/Footer';
 import { Activity, Users, MapPin, Moon, Sun, Stethoscope, ChevronLeft } from 'lucide-react';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'patient-dashboard'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'patient-dashboard' | 'therapist-profile' | 'about'>('home');
   const [darkMode, setDarkMode] = useState<boolean>(() => localStorage.getItem('theme') !== 'light');
+  const [showAuth, setShowAuth] = useState<boolean>(false);
 
   useEffect(() => {
     if (darkMode) {
@@ -17,6 +22,11 @@ export default function App() {
       localStorage.setItem('theme', 'light');
     }
   }, [darkMode]);
+
+  const handleNavigate = (page: string) => {
+    setCurrentPage(page as typeof currentPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div className={`min-h-screen font-sans antialiased transition-colors duration-300 ${darkMode ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'}`} dir="rtl">
@@ -33,7 +43,7 @@ export default function App() {
             <button onClick={() => setDarkMode(!darkMode)} className={`p-2.5 rounded-xl border transition ${darkMode ? 'bg-slate-800 border-slate-700 text-amber-400' : 'bg-slate-100 border-slate-200 text-slate-700'}`}>
               {darkMode ? <Sun className="w-4 h-4"/> : <Moon className="w-4 h-4"/>}
             </button>
-            <button onClick={() => alert('بخش پرتال درمانگران')} className={`hidden sm:inline-flex px-4 py-2.5 rounded-xl text-xs font-semibold border transition ${darkMode ? 'border-slate-700 hover:bg-slate-800 text-slate-300' : 'border-slate-300 hover:bg-slate-100 text-slate-700'}`}>ورود درمانگر</button>
+            <button onClick={() => setShowAuth(true)} className={`hidden sm:inline-flex px-4 py-2.5 rounded-xl text-xs font-semibold border transition ${darkMode ? 'border-slate-700 hover:bg-slate-800 text-slate-300' : 'border-slate-300 hover:bg-slate-100 text-slate-700'}`}>ورود درمانگر</button>
             <button onClick={() => setCurrentPage(currentPage === 'home' ? 'patient-dashboard' : 'home')} className="px-5 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/30 transition flex items-center gap-1.5">
               {currentPage === 'home' ? 'ورود بیمار' : 'صفحه اصلی'} <ChevronLeft className="w-4 h-4"/>
             </button>
@@ -41,8 +51,14 @@ export default function App() {
         </div>
       </header>
 
+      {showAuth && <AuthUI onClose={() => setShowAuth(false)} />}
+
       {currentPage === 'patient-dashboard' ? (
         <PatientDashboard/>
+      ) : currentPage === 'therapist-profile' ? (
+        <TherapistProfile/>
+      ) : currentPage === 'about' ? (
+        <About/>
       ) : (
         <main className="space-y-20 pb-20">
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20">
@@ -93,6 +109,8 @@ export default function App() {
           <FAQ/>
         </main>
       )}
+
+      <Footer onNavigate={handleNavigate} />
     </div>
   );
 }
