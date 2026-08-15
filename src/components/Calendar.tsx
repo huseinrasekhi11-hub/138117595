@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar as CalendarIcon, CircleCheck as CheckCircle2, MessageSquare } from 'lucide-react';
+import { Calendar as CalendarIcon, CheckCircle2, MessageSquare } from 'lucide-react';
 
 interface DayActivity {
   day: number;

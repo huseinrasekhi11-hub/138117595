@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Camera, CircleAlert as AlertCircle, CircleCheck as CheckCircle2, RefreshCw, Eye, Activity } from 'lucide-react';
+import { Camera, AlertCircle, CheckCircle2, RefreshCw, Eye, Activity } from 'lucide-react';
 
 interface PoseHUDProps {
   exerciseName?: string;

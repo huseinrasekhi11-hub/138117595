@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PoseHUD } from '../components/PoseHUD';
 import { RehabilitationCalendar } from '../components/Calendar';
-import { MessageCircle, Play, TriangleAlert as AlertTriangle } from 'lucide-react';
+import { MessageCircle, Play, AlertTriangle } from 'lucide-react';
 
 const mockExercises = [
   { id: 1, title: 'خم کردن زانو در حالت نشسته', targetJoint: 'مفصل زانو', sets: '۳ ست ۱۵ تایی', duration: '۱۰ دقیقه', videoThumb: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=600&q=80', commonMistake: 'بلند کردن لگن از روی صندلی' },
